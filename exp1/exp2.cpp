@@ -8,10 +8,11 @@
 #include <algorithm>
 
 using namespace std;
+using namespace CustomContainer;
 
 class Calculator {
 private:
-    // 函数名称到描述的映射
+    // 函数名到描述的映射
     map<string, string> Fun;
     // 支持的函数列表
     vector<string> funs = {
@@ -39,9 +40,9 @@ private:
         {'^', 4}, {'!', 5}, {'(', 6}, {')', 7}, {'#', 8}
     };
 
-    // 初始化函数描述
+    // 初始化函数映射
     void initFuns() {
-        Fun["sqrt"] = "计算平方根";
+        Fun["sqrt"] = "平方根函数";
         Fun["ln"] = "自然对数";
         Fun["log"] = "常用对数";
         Fun["sin"] = "正弦函数";
@@ -59,12 +60,7 @@ public:
         initFuns();
     }
 
-    /**
-     * 比较两个运算符的优先级
-     * @param stackTop 栈顶运算符
-     * @param current 当前运算符
-     * @return 优先级关系（<, =, >）
-     */
+
     char comparePrt(char stackTop, char current) {
         if (opI.find(stackTop) != opI.end() && opI.find(current) != opI.end()) {
             int row = opI[stackTop];
@@ -74,13 +70,7 @@ public:
         throw runtime_error("未知运算符");
     }
 
-    /**
-     * 执行二元运算
-     * @param a 左操作数
-     * @param op 运算符
-     * @param b 右操作数
-     * @return 运算结果
-     */
+
     double calculateSimple(double a, char op, double b) {
         switch (op) {
         case '+': return a + b;
@@ -97,17 +87,13 @@ public:
         }
     }
 
-    /**
-     * 计算阶乘（单目运算）
-     * @param n 操作数
-     * @return 阶乘结果
-     */
+
     double Factorial(double n) {
         if (n < 0) {
-            throw runtime_error("阶乘函数参数不能为负");
+            throw runtime_error("阶乘运算数不能为负");
         }
         if (n != floor(n)) {  // 检查是否为整数
-            throw runtime_error("阶乘函数参数必须为整数");
+            throw runtime_error("阶乘运算数必须为整数");
         }
         if (n == 0 || n == 1) {
             return 1;
@@ -119,28 +105,23 @@ public:
         return result;
     }
 
-    /**
-     * 执行数学函数计算
-     * @param func 函数名
-     * @param value 函数参数
-     * @return 计算结果
-     */
+
     double calculateFun(const string& func, double value) {
         if (func == "sqrt") {
             if (value < 0) {
-                throw runtime_error("平方根函数参数不能为负");
+                throw runtime_error("平方根参数不能为负");
             }
             return sqrt(value);
         }
         else if (func == "ln") {
             if (value <= 0) {
-                throw runtime_error("自然对数函数参数必须为正");
+                throw runtime_error("自然对数参数必须为正");
             }
             return log(value);
         }
         else if (func == "log") {
             if (value <= 0) {
-                throw runtime_error("常用对数函数参数必须为正");
+                throw runtime_error("常用对数参数必须为正");
             }
             return log10(value);
         }
@@ -155,13 +136,13 @@ public:
         }
         else if (func == "asin") {
             if (value < -1 || value > 1) {
-                throw runtime_error("反正弦函数参数必须在[-1,1]范围内");
+                throw runtime_error("反正弦参数超出[-1,1]范围");
             }
             return asin(value);
         }
         else if (func == "acos") {
             if (value < -1 || value > 1) {
-                throw runtime_error("反余弦函数参数必须在[-1,1]范围内");
+                throw runtime_error("反余弦参数超出[-1,1]范围");
             }
             return acos(value);
         }
@@ -179,30 +160,17 @@ public:
         }
     }
 
-    /**
-     * 检查是否为支持的函数
-     * @param func 函数名
-     * @return 是否支持
-     */
+
     bool isF(const string& func) {
         return find(funs.begin(), funs.end(), func) != funs.end();
     }
 
-    /**
-     * 检查是否为运算符
-     * @param c 字符
-     * @return 是否为运算符
-     */
+
     bool isO(char c) {
         return string("+-*/^!()#").find(c) != string::npos;
     }
 
-    /**
-     * 从表达式中提取函数名
-     * @param expr 表达式
-     * @param pos 当前位置（引用传递，会被更新）
-     * @return 函数名
-     */
+
     string getFunc(const string& expr, size_t& pos) {
         string func;
         while (pos < expr.length() && isalpha(expr[pos])) {
@@ -212,18 +180,13 @@ public:
         return func;
     }
 
-    /**
-     * 从表达式中提取数字
-     * @param expr 表达式
-     * @param pos 当前位置（引用传递，会被更新）
-     * @return 数字字符串
-     */
+
     string getNumber(const string& expr, size_t& pos) {
         string numStr;
         bool hasDecimal = false;
         bool hasExponent = false;
 
-        // 处理负号（作为负数前缀）
+        // 处理负号，作为数字前缀
         if (expr[pos] == '-' && (pos == 0 || isO(expr[pos - 1]) || expr[pos - 1] == 'e' || expr[pos - 1] == 'E')) {
             numStr += expr[pos++];
         }
@@ -255,20 +218,15 @@ public:
         return numStr;
     }
 
-    /**
-     * 处理函数参数并计算函数值
-     * @param expr 表达式
-     * @param pos 当前位置（引用传递，会被更新）
-     * @return 函数计算结果
-     */
+
     double DealFunc(const string& expr, size_t& pos) {
         if (pos >= expr.length() || expr[pos] != '(') {
-            throw runtime_error("函数后必须跟左括号");
+            throw runtime_error("函数调用缺少左括号");
         }
         pos++;  // 跳过左括号
 
         string paramExpr;
-        int bcont = 1;  // 括号计数器，处理嵌套括号
+        int bcont = 1;  // 括号计数器(判断是否匹配)
         while (pos < expr.length() && bcont > 0) {
             if (expr[pos] == '(') {
                 bcont++;
@@ -284,20 +242,17 @@ public:
         }
 
         if (bcont != 0) {
-            throw runtime_error("函数参数括号不匹配");
+            throw runtime_error("括号不匹配");
         }
 
-        return Evaluate(paramExpr + "#");  // 递归计算参数表达式
+        return Evaluate(paramExpr + "#");  // 递归计算函数参数表达式
     }
 
-    /**
-     * 解析并计算表达式
-     * @param expression 待计算的表达式
-     * @return 计算结果
-     */
+
     double Evaluate(const string& expression) {
-        stack<char> opStack;       // 运算符栈
-        stack<double> numStack;    // 操作数栈
+        // 关键修改：使用自定义Stack替代std::stack
+        Stack<char> opStack;       // 运算符栈
+        Stack<double> numStack;    // 数字栈
 
         string expr = expression + "#";  // 添加结束符
         opStack.push('#');
@@ -351,7 +306,7 @@ public:
                     opStack.push(currentOp);
                     i++;
                     break;
-                case '=':  // 优先级相等（通常是括号匹配）
+                case '=':  // 优先级相等(处理括号匹配)
                     opStack.pop();
                     i++;
                     break;
@@ -359,17 +314,17 @@ public:
                     char op = opStack.top();
                     opStack.pop();
 
-                    if (op == '!') {  // 处理阶乘（单目运算）
+                    if (op == '!') {  // 处理阶乘(单目运算符)
                         if (numStack.empty()) {
-                            throw runtime_error("阶乘运算缺少操作数");
+                            throw runtime_error("阶乘缺少操作数");
                         }
                         double val = numStack.top();
                         numStack.pop();
                         numStack.push(Factorial(val));
                     }
-                    else {  // 处理二元运算
+                    else {  // 处理二元运算符
                         if (numStack.size() < 2) {
-                            throw runtime_error("二元运算操作数不足");
+                            throw runtime_error("二元运算缺少操作数");
                         }
                         double b = numStack.top(); numStack.pop();
                         double a = numStack.top(); numStack.pop();
@@ -378,7 +333,7 @@ public:
                     break;
                 }
                 default:
-                    throw runtime_error("表达式语法错误: 无效的运算符组合 " +
+                    throw runtime_error("表达式语法错误: 无效运算符组合 " +
                         string(1, stackTop) + " 和 " + string(1, currentOp));
                 }
             }
@@ -389,15 +344,13 @@ public:
 
         // 检查最终状态是否合法
         if (numStack.size() != 1 || opStack.top() != '#') {
-            throw runtime_error("表达式不完整或格式错误");
+            throw runtime_error("表达式不完整或语法错误");
         }
 
         return numStack.top();
     }
 
-    /**
-     * 启动计算器交互界面
-     */
+
     void ActivateEvaluator() {
         string input;
         while (true) {
