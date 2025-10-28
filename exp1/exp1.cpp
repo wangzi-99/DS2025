@@ -1,5 +1,6 @@
+#define _CRT_SECURE_NO_WARNINGS 1
 #include <iostream>
-#include <vector>
+#include "../MySTL/Vector.h"
 #include <algorithm>
 #include <random>
 #include <ctime>
