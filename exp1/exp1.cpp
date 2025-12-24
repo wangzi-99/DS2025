@@ -8,42 +8,42 @@
 #include <iomanip>
 #include <string>
 
-// ¸´ÊıÀà¶¨Òå
+// å¤æ•°ç±»å®šä¹‰
 class Complex {
 private:
-    double real;  // Êµ²¿
-    double imag;  // Ğé²¿
+    double real;  // å®éƒ¨
+    double imag;  // è™šéƒ¨
 
 public:
-    // ¹¹Ôìº¯Êı£¬Ä¬ÈÏ³õÊ¼»¯Îª0
+    // æ„é€ å‡½æ•°ï¼Œé»˜è®¤åˆå§‹åŒ–ä¸º0
     Complex(double r = 0.0, double i = 0.0) : real(r), imag(i) {}
 
-    // »ñÈ¡Êµ²¿
+    // è·å–å®éƒ¨
     double getReal() const { return real; }
 
-    // »ñÈ¡Ğé²¿
+    // è·å–è™šéƒ¨
     double getImag() const { return imag; }
 
-    // ¼ÆËã¸´ÊıµÄÄ£
+    // è®¡ç®—å¤æ•°çš„æ¨¡
     double getModulus() const { return std::sqrt(real * real + imag * imag); }
 
-    // ÖØÔØÏàµÈÔËËã·û£¨Êµ²¿ºÍĞé²¿¾ùÏàÍ¬²ÅÊÓÎªÏàµÈ£©
+    // é‡è½½ç›¸ç­‰è¿ç®—ç¬¦ï¼ˆå®éƒ¨å’Œè™šéƒ¨å‡ç›¸åŒæ‰è§†ä¸ºç›¸ç­‰ï¼‰
     bool operator==(const Complex& other) const {
         return real == other.real && imag == other.imag;
     }
 
-    // ÖØÔØĞ¡ÓÚÔËËã·û£¨°´Ä£ÅÅĞò£¬Ä£ÏàÍ¬Ôò°´Êµ²¿ÅÅĞò£©
+    // é‡è½½å°äºè¿ç®—ç¬¦ï¼ˆæŒ‰æ¨¡æ’åºï¼Œæ¨¡ç›¸åŒåˆ™æŒ‰å®éƒ¨æ’åºï¼‰
     bool operator<(const Complex& other) const {
         double mod1 = getModulus();
         double mod2 = other.getModulus();
-        // ¿¼ÂÇ¸¡µãÊı¾«¶ÈÎÊÌâ£¬Ê¹ÓÃ¼«Ğ¡ÖµÅĞ¶ÏÄ£ÊÇ·ñÏàµÈ
+        // è€ƒè™‘æµ®ç‚¹æ•°ç²¾åº¦é—®é¢˜ï¼Œä½¿ç”¨æå°å€¼åˆ¤æ–­æ¨¡æ˜¯å¦ç›¸ç­‰
         if (std::abs(mod1 - mod2) < 1e-10) {
             return real < other.real;
         }
         return mod1 < mod2;
     }
 
-    // ÖØÔØÊä³öÔËËã·û£¬·½±ã´òÓ¡¸´Êı
+    // é‡è½½è¾“å‡ºè¿ç®—ç¬¦ï¼Œæ–¹ä¾¿æ‰“å°å¤æ•°
     friend std::ostream& operator<<(std::ostream& os, const Complex& c) {
         os << "(" << c.real;
         if (c.imag >= 0)
@@ -54,55 +54,55 @@ public:
     }
 };
 
-// ÏòÁ¿ÖÃÂÒº¯Êı£¨Fisher-YatesÏ´ÅÆËã·¨£©
+// å‘é‡ç½®ä¹±å‡½æ•°ï¼ˆFisher-Yatesæ´—ç‰Œç®—æ³•ï¼‰
 void shuffleVector(std::vector<Complex>& vec) {
     for (int i = vec.size(); i > 0; i--) {
         std::swap(vec[i - 1], vec[rand() % i]);
     }
 }
 
-// ²éÕÒº¯Êı£¨²éÕÒÊµ²¿ºÍĞé²¿¾ùÏàÍ¬µÄ¸´Êı£©
+// æŸ¥æ‰¾å‡½æ•°ï¼ˆæŸ¥æ‰¾å®éƒ¨å’Œè™šéƒ¨å‡ç›¸åŒçš„å¤æ•°ï¼‰
 int findComplex(const std::vector<Complex>& vec, const Complex& target) {
     for (size_t i = 0; i < vec.size(); ++i) {
         if (vec[i] == target) {
             return static_cast<int>(i);
         }
     }
-    return -1;  // Î´ÕÒµ½·µ»Ø-1
+    return -1;  // æœªæ‰¾åˆ°è¿”å›-1
 }
 
-// ÏòÁ¿Î¨Ò»»¯º¯Êı£¨È¥³ıÖØ¸´ÔªËØ£©
+// å‘é‡å”¯ä¸€åŒ–å‡½æ•°ï¼ˆå»é™¤é‡å¤å…ƒç´ ï¼‰
 void uniqueVector(std::vector<Complex>& vec) {
     auto it = std::unique(vec.begin(), vec.end());
     vec.erase(it, vec.end());
 }
 
-// ÆğÅİÅÅĞò£¨°´¸´ÊıÄ£ÅÅĞò£©
+// èµ·æ³¡æ’åºï¼ˆæŒ‰å¤æ•°æ¨¡æ’åºï¼‰
 void bubbleSort(std::vector<Complex>& vec) {
     for (size_t i = 0; i < vec.size() - 1; ++i) {
         for (size_t j = 0; j < vec.size() - i - 1; ++j) {
-            if (!(vec[j] < vec[j + 1])) {  // Ê¹ÓÃÖØÔØµÄ<ÔËËã·û±È½Ï
+            if (!(vec[j] < vec[j + 1])) {  // ä½¿ç”¨é‡è½½çš„<è¿ç®—ç¬¦æ¯”è¾ƒ
                 std::swap(vec[j], vec[j + 1]);
             }
         }
     }
 }
 
-// ¹é²¢ÅÅĞòµÄºÏ²¢º¯Êı
+// å½’å¹¶æ’åºçš„åˆå¹¶å‡½æ•°
 void merge(std::vector<Complex>& vec, int left, int mid, int right) {
     int n1 = mid - left + 1;
     int n2 = right - mid;
 
-    // ÁÙÊ±ÏòÁ¿´æ´¢×óÓÒÁ½²¿·Ö
+    // ä¸´æ—¶å‘é‡å­˜å‚¨å·¦å³ä¸¤éƒ¨åˆ†
     std::vector<Complex> L(n1), R(n2);
 
-    // ¸´ÖÆÊı¾İµ½ÁÙÊ±ÏòÁ¿
+    // å¤åˆ¶æ•°æ®åˆ°ä¸´æ—¶å‘é‡
     for (int i = 0; i < n1; ++i)
         L[i] = vec[left + i];
     for (int j = 0; j < n2; ++j)
         R[j] = vec[mid + 1 + j];
 
-    // ºÏ²¢ÁÙÊ±ÏòÁ¿
+    // åˆå¹¶ä¸´æ—¶å‘é‡
     int i = 0, j = 0, k = left;
     while (i < n1 && j < n2) {
         if (L[i] < R[j]) {
@@ -116,7 +116,7 @@ void merge(std::vector<Complex>& vec, int left, int mid, int right) {
         ++k;
     }
 
-    // ´¦ÀíÊ£ÓàÔªËØ
+    // å¤„ç†å‰©ä½™å…ƒç´ 
     while (i < n1) {
         vec[k] = L[i];
         ++i;
@@ -129,23 +129,23 @@ void merge(std::vector<Complex>& vec, int left, int mid, int right) {
     }
 }
 
-// ¹é²¢ÅÅĞòµİ¹éÊµÏÖ
+// å½’å¹¶æ’åºé€’å½’å®ç°
 void mergeSort(std::vector<Complex>& vec, int left, int right) {
     if (left >= right) return;
 
-    int mid = left + (right - left) / 2;  // ±ÜÃâÒç³ö
-    mergeSort(vec, left, mid);           // ÅÅĞò×ó°ë²¿·Ö
-    mergeSort(vec, mid + 1, right);      // ÅÅĞòÓÒ°ë²¿·Ö
-    merge(vec, left, mid, right);        // ºÏ²¢Á½²¿·Ö
+    int mid = left + (right - left) / 2;  // é¿å…æº¢å‡º
+    mergeSort(vec, left, mid);           // æ’åºå·¦åŠéƒ¨åˆ†
+    mergeSort(vec, mid + 1, right);      // æ’åºå³åŠéƒ¨åˆ†
+    merge(vec, left, mid, right);        // åˆå¹¶ä¸¤éƒ¨åˆ†
 }
 
-// ¹é²¢ÅÅĞò½Ó¿Úº¯Êı
+// å½’å¹¶æ’åºæ¥å£å‡½æ•°
 void mergeSort(std::vector<Complex>& vec) {
     if (vec.empty()) return;
     mergeSort(vec, 0, vec.size() - 1);
 }
 
-// Çø¼ä²éÕÒº¯Êı£¨²éÕÒÄ£½éÓÚ[m1, m2)µÄ¸´Êı£©
+// åŒºé—´æŸ¥æ‰¾å‡½æ•°ï¼ˆæŸ¥æ‰¾æ¨¡ä»‹äº[m1, m2)çš„å¤æ•°ï¼‰
 std::vector<Complex> rangeSearch(const std::vector<Complex>& vec, double m1, double m2) {
     std::vector<Complex> result;
     for (const auto& c : vec) {
@@ -157,12 +157,12 @@ std::vector<Complex> rangeSearch(const std::vector<Complex>& vec, double m1, dou
     return result;
 }
 
-// Éú³ÉËæ»ú¸´ÊıÏòÁ¿£¨°üº¬ÖØ¸´Ïî£©
+// ç”Ÿæˆéšæœºå¤æ•°å‘é‡ï¼ˆåŒ…å«é‡å¤é¡¹ï¼‰
 std::vector<Complex> generateRandomComplexVector(int size) {
     std::vector<Complex> vec;
     std::random_device rd;
     std::mt19937 gen(rd());
-    std::uniform_real_distribution<> dis(-10.0, 10.0);  // Êµ²¿ºÍĞé²¿·¶Î§£º[-10, 10)
+    std::uniform_real_distribution<> dis(-10.0, 10.0);  // å®éƒ¨å’Œè™šéƒ¨èŒƒå›´ï¼š[-10, 10)
 
     for (int i = 0; i < size; ++i) {
         vec.emplace_back(dis(gen), dis(gen));
@@ -170,7 +170,7 @@ std::vector<Complex> generateRandomComplexVector(int size) {
     return vec;
 }
 
-// ´òÓ¡ÏòÁ¿
+// æ‰“å°å‘é‡
 void printVector(const std::vector<Complex>& vec, const std::string& title = "") {
     if (!title.empty()) {
         std::cout << title << ":" << std::endl;
@@ -178,106 +178,106 @@ void printVector(const std::vector<Complex>& vec, const std::string& title = "")
     for (size_t i = 0; i < vec.size(); ++i) {
         std::cout << vec[i];
         if (i < vec.size() - 1) std::cout << ", ";
-        if ((i + 1) % 5 == 0) std::cout << std::endl;  // Ã¿5¸öÔªËØ»»ĞĞ
+        if ((i + 1) % 5 == 0) std::cout << std::endl;  // æ¯5ä¸ªå…ƒç´ æ¢è¡Œ
     }
     std::cout << std::endl << std::endl;
 }
 
 int main() {
-    srand(static_cast<unsigned int>(time(nullptr)));  // ³õÊ¼»¯Ëæ»úÊıÖÖ×Ó
+    srand(static_cast<unsigned int>(time(nullptr)));  // åˆå§‹åŒ–éšæœºæ•°ç§å­
 
-    // 1. Éú³ÉËæ»ú¸´ÊıÏòÁ¿£¨º¬ÖØ¸´Ïî£©
+    // 1. ç”Ÿæˆéšæœºå¤æ•°å‘é‡ï¼ˆå«é‡å¤é¡¹ï¼‰
     std::vector<Complex> vec = generateRandomComplexVector(20);
-    printVector(vec, "³õÊ¼Ëæ»ú¸´ÊıÏòÁ¿");
-    std::cout << "Ëæ»ú¸´ÊıÏòÁ¿Éú³ÉÍê±Ï" << std::endl;
+    printVector(vec, "åˆå§‹éšæœºå¤æ•°å‘é‡");
+    std::cout << "éšæœºå¤æ•°å‘é‡ç”Ÿæˆå®Œæ¯•" << std::endl;
 
-    // (1) ²âÊÔÎŞĞòÏòÁ¿µÄ¸÷ÖÖ²Ù×÷
-    std::cout << "=== ²âÊÔ¸÷ÖÖ²Ù×÷ ===" << std::endl;
+    // (1) æµ‹è¯•æ— åºå‘é‡çš„å„ç§æ“ä½œ
+    std::cout << "=== æµ‹è¯•å„ç§æ“ä½œ ===" << std::endl;
 
-    // ÖÃÂÒ²Ù×÷
+    // ç½®ä¹±æ“ä½œ
     shuffleVector(vec);
-    printVector(vec, "ÖÃÂÒºóµÄÏòÁ¿");
+    printVector(vec, "ç½®ä¹±åçš„å‘é‡");
 
-    // ²éÕÒ²Ù×÷
-    Complex target = vec[3];  // ÒÔµÚ4¸öÔªËØÎª²éÕÒÄ¿±ê
+    // æŸ¥æ‰¾æ“ä½œ
+    Complex target = vec[3];  // ä»¥ç¬¬4ä¸ªå…ƒç´ ä¸ºæŸ¥æ‰¾ç›®æ ‡
     int index = findComplex(vec, target);
-    std::cout << "²éÕÒ " << target << " µÄÎ»ÖÃ: " << index << std::endl << std::endl;
+    std::cout << "æŸ¥æ‰¾ " << target << " çš„ä½ç½®: " << index << std::endl << std::endl;
 
-    // ²åÈë²Ù×÷
+    // æ’å…¥æ“ä½œ
     Complex newComplex(7.5, -3.2);
     vec.insert(vec.begin() + 2, newComplex);
-    printVector(vec, "ÔÚÎ»ÖÃ2²åÈë(7.5-3.2i)ºóµÄÏòÁ¿");
+    printVector(vec, "åœ¨ä½ç½®2æ’å…¥(7.5-3.2i)åçš„å‘é‡");
 
-    // É¾³ı²Ù×÷
+    // åˆ é™¤æ“ä½œ
     vec.erase(vec.begin() + 5);
-    printVector(vec, "É¾³ıÎ»ÖÃ5ÔªËØºóµÄÏòÁ¿");
+    printVector(vec, "åˆ é™¤ä½ç½®5å…ƒç´ åçš„å‘é‡");
 
-    // Î¨Ò»»¯²Ù×÷£¨ÏÈÌí¼ÓÖØ¸´ÔªËØ£©
+    // å”¯ä¸€åŒ–æ“ä½œï¼ˆå…ˆæ·»åŠ é‡å¤å…ƒç´ ï¼‰
     vec.push_back(vec[0]);
     vec.push_back(vec[1]);
-    printVector(vec, "Ìí¼ÓÖØ¸´ÔªËØºóµÄÏòÁ¿");
+    printVector(vec, "æ·»åŠ é‡å¤å…ƒç´ åçš„å‘é‡");
     uniqueVector(vec);
-    printVector(vec, "Î¨Ò»»¯ºóµÄÏòÁ¿");
+    printVector(vec, "å”¯ä¸€åŒ–åçš„å‘é‡");
 
-    // (2) ÅÅĞòĞ§ÂÊ±È½Ï
-    std::cout << "=== ÅÅĞòĞ§ÂÊ±È½Ï ===" << std::endl;
-    std::vector<Complex> largeVec = generateRandomComplexVector(5000);  // Éú³É½Ï´óÏòÁ¿ÓÃÓÚ²âÊÔĞ§ÂÊ
+    // (2) æ’åºæ•ˆç‡æ¯”è¾ƒ
+    std::cout << "=== æ’åºæ•ˆç‡æ¯”è¾ƒ ===" << std::endl;
+    std::vector<Complex> largeVec = generateRandomComplexVector(5000);  // ç”Ÿæˆè¾ƒå¤§å‘é‡ç”¨äºæµ‹è¯•æ•ˆç‡
 
-    // ×¼±¸ÈıÖÖÅÅĞò×´Ì¬µÄÏòÁ¿
+    // å‡†å¤‡ä¸‰ç§æ’åºçŠ¶æ€çš„å‘é‡
     std::vector<Complex> sortedVec = largeVec;
-    std::sort(sortedVec.begin(), sortedVec.end());  // Ë³ĞòÏòÁ¿
+    std::sort(sortedVec.begin(), sortedVec.end());  // é¡ºåºå‘é‡
 
     std::vector<Complex> reverseVec = sortedVec;
-    std::reverse(reverseVec.begin(), reverseVec.end());  // ÄæĞòÏòÁ¿
+    std::reverse(reverseVec.begin(), reverseVec.end());  // é€†åºå‘é‡
 
     std::vector<Complex> randomVec = largeVec;
-    shuffleVector(randomVec);  // ÂÒĞòÏòÁ¿
+    shuffleVector(randomVec);  // ä¹±åºå‘é‡
 
-    // ²âÊÔÆğÅİÅÅĞòĞ§ÂÊ
+    // æµ‹è¯•èµ·æ³¡æ’åºæ•ˆç‡
     auto testBubbleSort = [](std::vector<Complex> vec, const std::string& type) {
         clock_t start = clock();
         bubbleSort(vec);
         clock_t end = clock();
-        double duration = double(end - start) / CLOCKS_PER_SEC * 1000.0;  // ×ª»»ÎªºÁÃë
-        std::cout << "ÆğÅİÅÅĞò(" << type << "): " << std::fixed << std::setprecision(6)
+        double duration = double(end - start) / CLOCKS_PER_SEC * 1000.0;  // è½¬æ¢ä¸ºæ¯«ç§’
+        std::cout << "èµ·æ³¡æ’åº(" << type << "): " << std::fixed << std::setprecision(6)
             << duration << " ms" << std::endl;
         };
 
-    // ²âÊÔ¹é²¢ÅÅĞòĞ§ÂÊ
+    // æµ‹è¯•å½’å¹¶æ’åºæ•ˆç‡
     auto testMergeSort = [](std::vector<Complex> vec, const std::string& type) {
         clock_t start = clock();
         mergeSort(vec);
         clock_t end = clock();
-        double duration = double(end - start) / CLOCKS_PER_SEC * 1000.0;  // ×ª»»ÎªºÁÃë
-        std::cout << "¹é²¢ÅÅĞò(" << type << "): " << std::fixed << std::setprecision(6)
+        double duration = double(end - start) / CLOCKS_PER_SEC * 1000.0;  // è½¬æ¢ä¸ºæ¯«ç§’
+        std::cout << "å½’å¹¶æ’åº(" << type << "): " << std::fixed << std::setprecision(6)
             << duration << " ms" << std::endl;
         };
 
-    // ²âÊÔ²¢Êä³öÅÅĞòÊ±¼ä
-    testBubbleSort(sortedVec, "Ë³Ğò");
-    testBubbleSort(randomVec, "ÂÒĞò");
-    testBubbleSort(reverseVec, "ÄæĞò");
+    // æµ‹è¯•å¹¶è¾“å‡ºæ’åºæ—¶é—´
+    testBubbleSort(sortedVec, "é¡ºåº");
+    testBubbleSort(randomVec, "ä¹±åº");
+    testBubbleSort(reverseVec, "é€†åº");
     std::cout << std::endl;
 
-    testMergeSort(sortedVec, "Ë³Ğò");
-    testMergeSort(randomVec, "ÂÒĞò");
-    testMergeSort(reverseVec, "ÄæĞò");
+    testMergeSort(sortedVec, "é¡ºåº");
+    testMergeSort(randomVec, "ä¹±åº");
+    testMergeSort(reverseVec, "é€†åº");
     std::cout << std::endl;
 
-    // (3) Çø¼ä²éÕÒ
-    std::cout << "=== Çø¼ä²éÕÒ ===" << std::endl;
+    // (3) åŒºé—´æŸ¥æ‰¾
+    std::cout << "=== åŒºé—´æŸ¥æ‰¾ ===" << std::endl;
 
-    // ÏÈ¶ÔÏòÁ¿ÅÅĞò
+    // å…ˆå¯¹å‘é‡æ’åº
     mergeSort(vec);
-    printVector(vec, "ÅÅĞòºóµÄÏòÁ¿£¨ÓÃÓÚÇø¼ä²éÕÒ£©");
+    printVector(vec, "æ’åºåçš„å‘é‡ï¼ˆç”¨äºåŒºé—´æŸ¥æ‰¾ï¼‰");
 
-    // ²éÕÒÄ£½éÓÚ[5.0, 10.0)µÄ¸´Êı
+    // æŸ¥æ‰¾æ¨¡ä»‹äº[5.0, 10.0)çš„å¤æ•°
     double m1 = 5.0, m2 = 10.0;
     std::vector<Complex> rangeResult = rangeSearch(vec, m1, m2);
-    printVector(rangeResult, "Ä£ÔÚ[" + std::to_string(m1) + ", " + std::to_string(m2) + ")·¶Î§ÄÚµÄ¸´Êı");
+    printVector(rangeResult, "æ¨¡åœ¨[" + std::to_string(m1) + ", " + std::to_string(m2) + ")èŒƒå›´å†…çš„å¤æ•°");
 
-    // ÏÔÊ¾ÕÒµ½µÄ¸´ÊıµÄÄ£Öµ
-    std::cout << "¶ÔÓ¦µÄÄ£Öµ: ";
+    // æ˜¾ç¤ºæ‰¾åˆ°çš„å¤æ•°çš„æ¨¡å€¼
+    std::cout << "å¯¹åº”çš„æ¨¡å€¼: ";
     for (const auto& c : rangeResult) {
         std::cout << std::fixed << std::setprecision(2) << c.getModulus() << " ";
     }
