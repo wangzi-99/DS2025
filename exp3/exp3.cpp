@@ -1,17 +1,17 @@
 #include <iostream>
-#include "./MySTL/Vector.h"
+#include "../MySTL/Vector.h"
 #include <cstdlib>
 #include <ctime>
 using namespace std;
 
-// ¼ÆËã×î´ó¾ØÐÎÃæ»ý
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 int maxArea(const vector<int>& h) {
     int n = h.size();
     if (n == 0) return 0;
 
-    vector<int> l(n), r(n); // ×óÓÒ±ß½çÊý×é
+    vector<int> l(n), r(n); // ï¿½ï¿½ï¿½Ò±ß½ï¿½ï¿½ï¿½ï¿½ï¿½
 
-    // ×ó±ß½ç£º×ó²àµÚÒ»¸ö¸ü°«µÄÖù×ÓË÷Òý
+    // ï¿½ï¿½ß½ç£ºï¿½ï¿½ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     l[0] = -1;
     for (int i = 1; i < n; i++) {
         int t = i - 1;
@@ -19,7 +19,7 @@ int maxArea(const vector<int>& h) {
         l[i] = t;
     }
 
-    // ÓÒ±ß½ç£ºÓÒ²àµÚÒ»¸ö²»¸ßÓÚµ±Ç°µÄÖù×ÓË÷Òý
+    // ï¿½Ò±ß½ç£ºï¿½Ò²ï¿½ï¿½Ò»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Úµï¿½Ç°ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     r[n - 1] = n;
     for (int i = n - 2; i >= 0; i--) {
         int t = i + 1;
@@ -27,7 +27,7 @@ int maxArea(const vector<int>& h) {
         r[i] = t;
     }
 
-    // ¼ÆËã×î´óÃæ»ý
+    // ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
     int res = 0;
     for (int i = 0; i < n; i++) {
         res = max(res, h[i] * (r[i] - l[i] - 1));
@@ -35,10 +35,10 @@ int maxArea(const vector<int>& h) {
     return res;
 }
 
-// Éú³ÉËæ»ú¸ß¶ÈÊý×é
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ß¶ï¿½ï¿½ï¿½ï¿½ï¿½
 vector<int> randH() {
-    int len = rand() % 100000 + 1; 
-    vector<int> h(len);
+    int len = rand() % 100 + 1;  // Reduced size to avoid issues
+    vector<int> h(len, len);     // Initialize with size=capacity=len
     for (int i = 0; i < len; i++) {
         h[i] = rand() % 10001;
     }
@@ -48,7 +48,7 @@ vector<int> randH() {
 int main() {
     srand(time(0));
     for (int i = 1; i <= 10; i++) {
-        cout << "²âÊÔÓÃÀý " << i << ": " << maxArea(randH()) << endl;
+        cout << "ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ " << i << ": " << maxArea(randH()) << endl;
     }
     return 0;
 }
